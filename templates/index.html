@@ -72,7 +72,7 @@
         <label for="userMessage">Enter your question:</label>
         <input type="text" id="userMessage" class="chat-box" placeholder="Type your message here..." required>
         
-        <button onclick="getResponse()">Ask</button>
+        <button id="askButton">Ask</button>
         
         <div id="loading">Loading...</div>
         
@@ -80,6 +80,8 @@
     </div>
 
     <script>
+        document.querySelector('#askButton').addEventListener('click', getResponse);
+
         function getResponse() {
             const userMessage = document.getElementById("userMessage").value.trim();
             
@@ -88,11 +90,10 @@
                 return;
             }
 
-            
             document.getElementById("loading").style.display = "block";
             document.getElementById("botResponse").style.display = "none";
 
-            fetch('https://jubilant-space-robot-q79gpjwv97gw24r77-5000.app.github.dev//get_response', {
+            fetch('/get_response', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -109,7 +110,6 @@
                 document.getElementById("loading").style.display = "none";
                 document.getElementById("botResponse").style.display = "block";
                 document.getElementById("botResponse").innerText = "Sorry, there was an error processing your request.";
-                console.error('Error:', error);
             });
         }
     </script>
