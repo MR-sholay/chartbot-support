@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupportBot - Chat with Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .chat-box {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+        }
+        .response-container {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            color: #555;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #loading {
+            display: none;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SupportBot - Ask Your Questions</h1>
+    </header>
+    
+    <div class="chat-container">
+        <label for="userMessage">Enter your question:</label>
+        <input type="text" id="userMessage" class="chat-box" placeholder="Type your message here..." required>
+        
+        <button onclick="getResponse()">Ask</button>
+        
+        <div id="loading">Loading...</div>
+        
+        <div id="botResponse" class="response-container"></div>
+    </div>
+
+    <script>
+        function getResponse() {
+            const userMessage = document.getElementById("userMessage").value.trim();
+            
+            if (!userMessage) {
+                alert("Please enter a question.");
+                return;
+            }
+
+            
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("botResponse").style.display = "none";
+
+            fetch('https://jubilant-space-robot-q79gpjwv97gw24r77-5000.app.github.dev//get_response', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'messageText=' + encodeURIComponent(userMessage)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("botResponse").style.display = "block";
+                document.getElementById("botResponse").innerText = data.response;
+            })
+            .catch(error => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("botResponse").style.display = "block";
+                document.getElementById("botResponse").innerText = "Sorry, there was an error processing your request.";
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
